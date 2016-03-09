@@ -12,6 +12,9 @@ public class WaterPerlinGlobal : MonoBehaviour
    
     public float scale;                             // Scale of the perlin noise
     public float heightScale;                       // Height of the perlin noise 
+    public float speed;
+    public float decal;
+
 
     public Transform waters;                        // Empty GameObject with all the water spawned
 	public GameObject water;
@@ -47,7 +50,7 @@ public class WaterPerlinGlobal : MonoBehaviour
 				for (int u = 0; u < vertices.Length; u++) 
 				{
                     vertices[u] = my_Waters[p].TransformPoint(my_Waters[p].GetComponent<MeshFilter>().mesh.vertices[u]);            //Change the vertex coordonate from local to world
-                    vertices[u].y = heightScale * Mathf.PerlinNoise((vertices[u].x * scale) + Time.time, (vertices[u].z * scale) + Time.time);    //Aply perlin noise
+                    vertices[u].y = heightScale * Mathf.PerlinNoise((vertices[u].x * scale) - Time.time/speed, (vertices[u].z * scale) + Time.time/speed);    //Aply perlin noise
                     vertices[u] = my_Waters[p].InverseTransformPoint(vertices[u]);                                                  //Bring back the vertex changes to local
                 }
 
