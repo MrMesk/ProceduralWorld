@@ -39,9 +39,10 @@ namespace Chunk {
             // Preload biome matrix
 
             // Generate chunk's terrain
-            GenerateTerrain(TerrainUtility.GenerateBiomeMatrix(globalBiomeMatrix, _x, _y);
+            //GenerateTerrain(TerrainUtility.GenerateBiomeMatrix(globalBiomeMatrix, _x, _y);
 
             // Act depending of the chunk's biome
+            /*
             switch (_biomeMatrix[1, 1]) {
                 case Biome.SEA:
                     break;
@@ -51,7 +52,7 @@ namespace Chunk {
                     break;
                 case Biome.MOUNTAIN:
                     break;
-            }
+            }*/
         }
 
         // Handle terrain generation
