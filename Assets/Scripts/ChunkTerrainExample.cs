@@ -38,6 +38,10 @@ public class ChunkTerrainExample : MonoBehaviour {
         };
     }
 
+    public void ChunkTriggerCalledAt(int x, int y) {
+
+    }
+
     /** BIOMEMATRIX NOMENCLATURE EXAMPLES **/
     // Chunk.Terrain.GenerateBiomeMatrix (
     //      Biome topLeft,      Biome top,      Biome topRight,
