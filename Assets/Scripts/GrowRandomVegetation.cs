@@ -33,23 +33,26 @@ public class GrowRandomVegetation : MonoBehaviour
 		for(int i = 0; i < nbToGenerate; i++)
 		{
 			Vector3 coords = transform.position + new Vector3(Random.Range(-5f, 5f) * i, 0, Random.Range(-5f, 5f)); // Generating random coordinates around the X and Z axis
-			vegetationSize = Random.Range(3, 6); // Random between 4 and 6 to randomly create bushes, little and tall trees
-			if(vegetationSize < 4)
+			vegetationSize = Random.Range(2, 6); // Random between 4 and 6 to randomly create bushes, little and tall trees
+			scale = Random.Range(0.5f, 1f);
+			if (vegetationSize < 3)
 			{
 				matsIndex = 0;
 				endScale = new Vector3(0.5f, 0.5f, 0.5f);
+				scale /= 2f;
 			}
-			else if(vegetationSize == 4)
+			else if(vegetationSize == 3)
 			{
 				matsIndex = 1;
 				endScale = new Vector3(0.7f, 0.7f, 0.7f);
+				scale /= 1.5f;
 			}
 			else
 			{
 				matsIndex = 2;
 				endScale = new Vector3(1.5f,1.5f, 1.5f);
 			}
-			scale = Random.Range(0.5f, 1f); // Setting a random scale
+			 // Setting a random scale
 			growVegetation(coords.x, coords.y, coords.z);
 		}
 		
@@ -57,9 +60,12 @@ public class GrowRandomVegetation : MonoBehaviour
 
 	public void growVegetation (float x, float y, float z)
 	{
-		fractalVegetation = new GameObject("Fractal_Vegetation"); // Creating an empty gameObject to store our fractal
-		fractalVegetation.transform.parent = gameObject.transform; // We set the vegetation as a child
-		drawTree(x, y, z, y, 90.0f, 90.0f, vegetationSize); // Call generation method
+		// Creating an empty gameObject to store our fractal
+		fractalVegetation = new GameObject("Fractal_Vegetation");
+		// We set the vegetation as a child
+		fractalVegetation.transform.parent = gameObject.transform;
+		// Call generation method
+		drawTree(x, y, z, y, 90.0f, 90.0f, vegetationSize);
 	}
 
 	//Recursively draws the fractal vegetation
@@ -93,11 +99,6 @@ public class GrowRandomVegetation : MonoBehaviour
 			drawTree(x2, y2, z2, y4, angle - (baseBranchSpread - Random.value * randomness), angle2 + (baseBranchSpread - Random.value * randomness), vegetationSize - 1);
 
 		}
-		else if(vegetationSize == 0)
-		{
-			drawLeaf(x1, y1, z1);
-			vegetationSize--;
-		}
 	}
 	void drawLeaf(float x, float y, float z)
 	{
@@ -130,5 +131,11 @@ public class GrowRandomVegetation : MonoBehaviour
 		//Draw the line.
 		branchLine.SetPosition(0, new Vector3(x1, y1, z1));
 		branchLine.SetPosition(1, new Vector3(x2, y2, z2));
+
+		if (generationIndex == 1)
+		{
+			drawLeaf(x2, y2, z2);
+		}
+			
 	}
 }
