@@ -7,31 +7,26 @@ using System.Collections.Generic;
 public class ChunkTerrainExample : MonoBehaviour {
 
     // 2 Axis Biome Matrix
-    Dictionary<int, Dictionary<int, Chunk.Biome>> dictionary;
+    static Dictionary<int, Dictionary<int, Chunk.Biome>> globalBiomeMatrix = new Dictionary<int, Dictionary<int, Chunk.Biome>>();
 
     public float size = 1;
 
     void Start() {
+        // Reset the global biome matrix
+        globalBiomeMatrix = new Dictionary<int, Dictionary<int, Chunk.Biome>>();
+
         // Scale the terrain
         transform.localScale = new Vector3(size, 1, size);
 
         // Generate the terrain's mesh
-        Mesh mesh = Chunk.Terrain.GenerateMesh((int)size, (int)size, ExampleBiomeMatrixTest());
+        Mesh mesh = Chunk.TerrainUtility.GenerateMesh((int)size, (int)size, ExampleBiomeMatrixTest());
 
         // Edit the mesh by applying a height modifier based on biomes
-        Chunk.Terrain.ApplyBiomeHeightModification(ref mesh);
+        Chunk.TerrainUtility.ApplyBiomeHeightModification(ref mesh);
 
         // Apply the mesh by setting it in the MeshFilter
         GetComponent<MeshFilter>().mesh = mesh;
-    }
 
-    // Example of a Biome Matrix used to generate this terrain
-    Chunk.Biome[,] ExampleBiomeMatrixTest() {
-        return new Chunk.Biome[,] {
-            { (Chunk.Biome)3, (Chunk.Biome)3, (Chunk.Biome)3 },
-            { (Chunk.Biome)4, (Chunk.Biome)4, (Chunk.Biome)4 },
-            { (Chunk.Biome)3, (Chunk.Biome)3, (Chunk.Biome)3 }
-        };
     }
 
     // Example of a Biome Matrix used to generate this terrain
@@ -51,7 +46,7 @@ public class ChunkTerrainExample : MonoBehaviour {
     // )
 
     Chunk.Biome[,] ExampleBiomeMatrix1() {
-        return Chunk.Terrain.GenerateBiomeMatrix(
+        return Chunk.TerrainUtility.GenerateBiomeMatrix(
             Chunk.Biome.MOUNTAIN, Chunk.Biome.GRASSLAND, Chunk.Biome.GRASSLAND,
             Chunk.Biome.GRASSLAND, Chunk.Biome.GRASSLAND, Chunk.Biome.BEACH,
             Chunk.Biome.GRASSLAND, Chunk.Biome.BEACH, Chunk.Biome.SEA

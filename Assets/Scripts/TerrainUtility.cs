@@ -14,7 +14,7 @@ namespace Chunk {
         MOUNTAIN    =   4
     }
 
-    public static class Terrain {
+    public static class TerrainUtility {
 
         // Helper method used to generate a proper biome matrix
         public static Biome[,] GenerateBiomeMatrix (
@@ -50,78 +50,100 @@ namespace Chunk {
             Biome biomeFound;
 
             // Bottom Left
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x - 1, out yAxis) // X
+                && yAxis.TryGetValue(y - 1, out biomeFound)     // Y
+            ) {
+                matrix[0, 0] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[0, 0] = bottomLeft;
 
             // Bottom
-            if (globalBiomeMatrix.TryGetValue(x, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[1, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x, out yAxis)     // X
+                && yAxis.TryGetValue(y - 1, out biomeFound)     // Y
+            ) {
+                matrix[1, 0] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[1, 0] = bottom;
 
             // Bottom Right
-            if (globalBiomeMatrix.TryGetValue(x + 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x + 1, out yAxis) // X
+                && yAxis.TryGetValue(y - 1, out biomeFound)     // Y
+            ) {
+                matrix[2, 0] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[2, 0] = bottomRight;
 
             // Left
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x - 1, out yAxis) // X
+                && yAxis.TryGetValue(y, out biomeFound)         // Y
+            ) {
+                matrix[0, 1] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[0, 1] = left;
 
             // Center
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x, out yAxis)     // X
+                && yAxis.TryGetValue(y, out biomeFound)         // Y
+            ) {
+                matrix[1, 1] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[0, 1] = center;
 
             // Right
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x, out yAxis)     // X
+                && yAxis.TryGetValue(y - 1, out biomeFound)     // Y
+            ) {
+                matrix[2, 1] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[2, 1] = right;
 
             // Top Left
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x - 1, out yAxis) // X
+                && yAxis.TryGetValue(y + 1, out biomeFound)     // Y
+            ) {
+                matrix[0, 2] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[0, 2] = topLeft;
 
             // Top
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x, out yAxis)     // X
+                && yAxis.TryGetValue(y + 1, out biomeFound)     // Y
+            ) {
+                matrix[1, 2] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[1, 2] = top;
 
             // Top Right
-            if (globalBiomeMatrix.TryGetValue(x - 1, out yAxis)) {
-                if (yAxis.TryGetValue(y - 1, out biomeFound)) {
-                    matrix[0, 0] = biomeFound;
-                }
+            if (
+                globalBiomeMatrix.TryGetValue(x + 1, out yAxis)    // X
+                && yAxis.TryGetValue(y + 1, out biomeFound)     // Y
+            ) {
+                matrix[2, 2] = biomeFound;
+            } else {
+                goto Error;
             }
-            matrix[2, 2] = topRight;
 
             return matrix;
+
+            // Error handler
+            Error:
+            return null;
         }
 
         // Define the pivot of the mesh at mesh generation
