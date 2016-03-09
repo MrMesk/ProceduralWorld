@@ -4,15 +4,6 @@ using System.Collections.Generic;
 
 // Chunk namespace containing all chunk related programing
 namespace Chunk {
-    
-    // Enumerated biomes
-    public enum Biome : byte {
-        NULL        =   0,
-        SEA         =   1,
-        BEACH       =   2,
-        GRASSLAND   =   3,
-        MOUNTAIN    =   4
-    }
 
     public static class TerrainUtility {
 
