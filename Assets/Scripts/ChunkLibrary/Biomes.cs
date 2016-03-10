@@ -203,22 +203,22 @@ namespace Chunk {
                             }
                         } else {
                             // Next to sea
-                            // 50% Sea
-                            // 50% Beach
+                            // 75% Sea
+                            // 25% Beach
                             if (!globalBiomeMatrix.TryGetValue(x, out yAxis)) {     //X
                                 yAxis = new Dictionary<int, Biome>();
                                 globalBiomeMatrix.Add(x, yAxis);
                             }
                             if (yAxis.TryGetValue(y, out biomeFound)) {             //Y
                                 float r = Random.value;
-                                if (r > 0.5f) {
+                                if (r < 0.75f) {
                                     yAxis[y] = Biome.SEA;
                                 } else {
                                     yAxis[y] = Biome.BEACH;
                                 }
                             } else {
                                 float r = Random.value;
-                                if (r > 0.5f) {
+                                if (r < 0.75f) {
                                     yAxis.Add(y, Biome.SEA);
                                 } else {
                                     yAxis.Add(y, Biome.BEACH);
@@ -244,22 +244,22 @@ namespace Chunk {
                             }
                         } else {
                             // Next to beach and grassland
-                            // 50% Beach
-                            // 50% Grassland
+                            // 25% Beach
+                            // 75% Grassland
                             if (!globalBiomeMatrix.TryGetValue(x, out yAxis)) {     //X
                                 yAxis = new Dictionary<int, Biome>();
                                 globalBiomeMatrix.Add(x, yAxis);
                             }
                             if (yAxis.TryGetValue(y, out biomeFound)) {             //Y
                                 float r = Random.value;
-                                if (r > 0.5f) {
+                                if (r < 0.25f) {
                                     yAxis[y] = Biome.BEACH;
                                 } else {
                                     yAxis[y] = Biome.GRASSLAND;
                                 }
                             } else {
                                 float r = Random.value;
-                                if (r > 0.5f) {
+                                if (r < 0.25f) {
                                     yAxis.Add(y, Biome.BEACH);
                                 } else {
                                     yAxis.Add(y, Biome.GRASSLAND);
@@ -281,27 +281,27 @@ namespace Chunk {
                             }
                         } else {
                             // Next to beach
-                            // 33% Sea
-                            // 34% Beach
-                            // 33% Grassland
+                            // 100% Sea
+                            // 25% Beach
+                            // 37.5% Grassland
                             if (!globalBiomeMatrix.TryGetValue(x, out yAxis)) {     //X
                                 yAxis = new Dictionary<int, Biome>();
                                 globalBiomeMatrix.Add(x, yAxis);
                             }
                             if (yAxis.TryGetValue(y, out biomeFound)) {             //Y
                                 float r = Random.value;
-                                if (r > 0.67f) {
+                                if (r > 0.625f) {
                                     yAxis[y] = Biome.SEA;
-                                } else if (r > 0.34f) {
+                                } else if (r > 0.375f) {
                                     yAxis[y] = Biome.BEACH;
                                 } else {
                                     yAxis[y] = Biome.GRASSLAND;
                                 }
                             } else {
                                 float r = Random.value;
-                                if (r > 0.67f) {
+                                if (r > 0.625f) {
                                     yAxis.Add(y, Biome.SEA);
-                                } else if (r > 0.34f) {
+                                } else if (r > 0.375f) {
                                     yAxis.Add(y, Biome.BEACH);
                                 } else {
                                     yAxis.Add(y, Biome.GRASSLAND);
@@ -313,22 +313,22 @@ namespace Chunk {
                     if (nextToGrassland) {
                         if (nextToMountain) {
                             // Next to grassland and mountain
-                            // 50% Grassland
-                            // 50% Mountain
+                            // 75% Grassland
+                            // 25% Mountain
                             if (!globalBiomeMatrix.TryGetValue(x, out yAxis)) {     //X
                                 yAxis = new Dictionary<int, Biome>();
                                 globalBiomeMatrix.Add(x, yAxis);
                             }
                             if (yAxis.TryGetValue(y, out biomeFound)) {             //Y
                                 float r = Random.value;
-                                if (r > 0.5f) {
+                                if (r > 0.25f) {
                                     yAxis[y] = Biome.GRASSLAND;
                                 } else {
                                     yAxis[y] = Biome.MOUNTAIN;
                                 }
                             } else {
                                 float r = Random.value;
-                                if (r > 0.5f) {
+                                if (r > 0.25f) {
                                     yAxis.Add(y, Biome.GRASSLAND);
                                 } else {
                                     yAxis.Add(y, Biome.MOUNTAIN);
@@ -336,27 +336,27 @@ namespace Chunk {
                             }
                         } else {
                             // Next to grassland
-                            // 33% Beach
-                            // 34% Grassland
-                            // 33% Mountain
+                            // 25% Beach
+                            // 50% Grassland
+                            // 25% Mountain
                             if (!globalBiomeMatrix.TryGetValue(x, out yAxis)) {     //X
                                 yAxis = new Dictionary<int, Biome>();
                                 globalBiomeMatrix.Add(x, yAxis);
                             }
                             if (yAxis.TryGetValue(y, out biomeFound)) {             //Y
                                 float r = Random.value;
-                                if (r > 0.67f) {
+                                if (r > 0.75f) {
                                     yAxis[y] = Biome.BEACH;
-                                } else if (r > 0.34f) {
+                                } else if (r > 0.25f) {
                                     yAxis[y] = Biome.GRASSLAND;
                                 } else {
                                     yAxis[y] = Biome.MOUNTAIN;
                                 }
                             } else {
                                 float r = Random.value;
-                                if (r > 0.67f) {
+                                if (r > 0.75f) {
                                     yAxis.Add(y, Biome.BEACH);
-                                } else if (r > 0.34f) {
+                                } else if (r > 0.25f) {
                                     yAxis.Add(y, Biome.GRASSLAND);
                                 } else {
                                     yAxis.Add(y, Biome.MOUNTAIN);
@@ -366,22 +366,22 @@ namespace Chunk {
                     } else {
                         if (nextToMountain) {
                             // Next to mountain
-                            // 50% Grassland
-                            // 50% Mountain
+                            // 75% Grassland
+                            // 25% Mountain
                             if (!globalBiomeMatrix.TryGetValue(x, out yAxis)) {     //X
                                 yAxis = new Dictionary<int, Biome>();
                                 globalBiomeMatrix.Add(x, yAxis);
                             }
                             if (yAxis.TryGetValue(y, out biomeFound)) {             //Y
                                 float r = Random.value;
-                                if (r > 0.5) {
+                                if (r > 0.25f) {
                                     yAxis[y] = Biome.GRASSLAND;
                                 } else {
                                     yAxis[y] = Biome.MOUNTAIN;
                                 }
                             } else {
                                 float r = Random.value;
-                                if (r > 0.5) {
+                                if (r > 0.25f) {
                                     yAxis.Add(y, Biome.GRASSLAND);
                                 } else {
                                     yAxis.Add(y, Biome.MOUNTAIN);

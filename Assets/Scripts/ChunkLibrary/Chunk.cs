@@ -19,7 +19,7 @@ namespace Chunk {
         // Prefab storage
         public GameObject prefabChunk;
         public GameObject prefabTerrain;
-        public GameObject prefabOcean;
+        public GameObject prefabSea;
 
         // Global data
         static Vector2 spacing;         // spacing between chunks
@@ -42,9 +42,9 @@ namespace Chunk {
             chunkManager = _chunkManager;
 
             // Set global data
-            spacing = new Vector2(16, 16);
+            spacing = new Vector2(10, 10);
             terrainResolution = 16;
-            terrainScale = new Vector3(16, 2.5f, 16);
+            terrainScale = new Vector3(10, 2.5f, 10);
         }
 
         public static GameObject CreateAt(GameObject prefabChunk, int _x, int _y) {
@@ -70,7 +70,6 @@ namespace Chunk {
                 for (_y = y - 1; _y <= y + 1; _y++) {
                     if (!globalBiomeMatrix.TryGetValue(_x, out biomeYAxis) || !biomeYAxis.ContainsKey(_y)) {
                         // Load biome if it wasn't loaded until now
-                        Debug.Log("X : " + _x + " | Y : " + _y);
                         BiomeUtility.LoadBiome(globalBiomeMatrix, _x, _y);
                     }
                 }
@@ -82,8 +81,10 @@ namespace Chunk {
             // Act depending of the chunk's biome
             switch (globalBiomeMatrix[x][y]) {
                 case Biome.SEA:
+                    GenerateSea();
                     break;
                 case Biome.BEACH:
+                    GenerateSea();
                     break;
                 case Biome.GRASSLAND:
                     break;
@@ -119,12 +120,20 @@ namespace Chunk {
             terrain.Set(_biomeMatrix, terrainResolution, this);
         }
 
+        // Handle terrain generation
+        void GenerateSea() {
+            GameObject instance = Instantiate(prefabSea) as GameObject;
+            instance.name = prefabSea.name;
+            instance.transform.parent = transform;
+            instance.transform.localPosition = Vector3.up * -8f ;
+            instance.transform.localScale = Vector3.one;
+        }
+
         bool triggered = false;
 
         // Handle player detection
         void OnTriggerEnter(Collider other) {
             if (!triggered && other.tag == "Player") {
-                Debug.Log("TAIGA");
                 triggered = true;
                 chunkManager.ChunkTriggerCalledAt(x, y);
             }
