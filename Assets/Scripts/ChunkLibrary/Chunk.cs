@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Chunk {
 
     [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Rigidbody))]
     public class Chunk : MonoBehaviour {
         // Global Biome Matrix
         public static Dictionary<int, Dictionary<int, Biome>> globalBiomeMatrix = new Dictionary<int, Dictionary<int, Biome>>();
@@ -12,38 +13,74 @@ namespace Chunk {
         // Global Chunk Matrix
         public static Dictionary<int, Dictionary<int, Chunk>> globalChunkMatrix = new Dictionary<int, Dictionary<int, Chunk>>();
 
+        // Reference toward the chunk manager
         static ChunkTerrainExample chunkManager;
+
+        // Prefab storage
+        public GameObject prefabChunk;
         public GameObject prefabTerrain;
         public GameObject prefabOcean;
 
-        public int x;
-        public int y;
-        GameObject terrain;
-        static int terrainResolution;
+        // Global data
+        static Vector2 spacing;         // spacing between chunks
+        static int terrainResolution;   // terrain's resolution in tiles
+        static Vector3 terrainScale;    // terrain's scale
+
+        // Instance data
+        public int x;                   // chunk's x position
+        public int y;                   // chunk's y position
+        GameObject terrain;             // chunk's reference towards associated terrain game object
 
         // Reset globals
-        public static void ResetGlobals() {
+        public static void Init(ChunkTerrainExample _chunkManager) {
             // Reset global biome matrix
-            globalBiomeMatrix = new Dictionary<int, Dictionary<int, Biome>>();
-
+            globalBiomeMatrix.Clear();
             // Reset global chunk matrix
-            globalChunkMatrix = new Dictionary<int, Dictionary<int, Chunk>>();
+            globalChunkMatrix.Clear();
+
+            // Set the chunk manager
+            chunkManager = _chunkManager;
+
+            // Set global data
+            spacing = new Vector2(16, 16);
+            terrainResolution = 16;
+            terrainScale = new Vector3(16, 2.5f, 16);
+        }
+
+        public static GameObject CreateAt(GameObject prefabChunk, int _x, int _y) {
+            GameObject output = Instantiate(prefabChunk);
+            output.name = prefabChunk.name;
+            output.transform.parent = chunkManager.transform;
+            output.transform.position = new Vector3(_x * spacing.x, 0, _y * spacing.y);
+            Chunk chunkInstance = output.GetComponent<Chunk>();
+            chunkInstance.Load(_x, _y);
+            return null;
         }
 
         // Handle chunk configuration
-        void Load(int _x, int _y) {
+        public void Load(int _x, int _y) {
             // Configure the chunk
             x = _x;
             y = _y;
 
             // Preload biome matrix
+            // Load surounding biomes if necessary
+            Dictionary<int, Biome> biomeYAxis;
+            for (_x = x -1; _x <=  x + 1; _x++) {
+                for (_y = y - 1; _y <= y + 1; _y++) {
+                    if (!globalBiomeMatrix.TryGetValue(_x, out biomeYAxis) || !biomeYAxis.ContainsKey(_y)) {
+                        // Load biome if it wasn't loaded until now
+                        Debug.Log("X : " + _x + " | Y : " + _y);
+                        BiomeUtility.LoadBiome(globalBiomeMatrix, _x, _y);
+                    }
+                }
+            }
 
             // Generate chunk's terrain
-            //GenerateTerrain(TerrainUtility.GenerateBiomeMatrix(globalBiomeMatrix, _x, _y);
+            GenerateTerrain(TerrainUtility.GenerateBiomeMatrix(globalBiomeMatrix, x, y));
 
             // Act depending of the chunk's biome
-            /*
-            switch (_biomeMatrix[1, 1]) {
+            switch (globalBiomeMatrix[x][y]) {
                 case Biome.SEA:
                     break;
                 case Biome.BEACH:
@@ -52,23 +89,48 @@ namespace Chunk {
                     break;
                 case Biome.MOUNTAIN:
                     break;
-            }*/
+            }
+
+            // Set chunk trigger
+            gameObject.GetComponent<BoxCollider>().size = new Vector3(terrainScale.x, 16, terrainScale.z);
+
+            // Save Chunk
+            Dictionary<int, Chunk> chunkYAxis;
+            Chunk chunkFound;
+            if (!globalChunkMatrix.TryGetValue(x, out chunkYAxis)) {     //X
+                chunkYAxis = new Dictionary<int, Chunk>();
+                globalChunkMatrix.Add(x, chunkYAxis);
+            }
+            if (chunkYAxis.TryGetValue(y, out chunkFound)) {             //Y
+                chunkYAxis[y] = this;
+            } else {
+                chunkYAxis.Add(y, this);
+            }
         }
 
         // Handle terrain generation
         void GenerateTerrain(Biome[,] _biomeMatrix) {
-            GameObject terrain = Instantiate(prefabTerrain) as GameObject;
-            terrain.transform.parent = transform.parent;
-            terrain.transform.position = Vector3.zero;
-            terrain.GetComponent<Terrain>().Set(_biomeMatrix, terrainResolution);
+            GameObject instance = Instantiate(prefabTerrain) as GameObject;
+            instance.name = prefabTerrain.name;
+            instance.transform.parent = transform;
+            instance.transform.localPosition = Vector3.zero;
+            instance.transform.localScale = terrainScale;
+            Terrain terrain = instance.GetComponent<Terrain>();
+            terrain.Set(_biomeMatrix, terrainResolution, this);
         }
+
+        bool triggered = false;
 
         // Handle player detection
         void OnTriggerEnter(Collider other) {
-            if (other.tag == "Player") {
+            if (!triggered && other.tag == "Player") {
+                Debug.Log("TAIGA");
+                triggered = true;
                 chunkManager.ChunkTriggerCalledAt(x, y);
             }
         }
+
+
 
     }
 

@@ -92,8 +92,8 @@ namespace Chunk {
 
             // Right
             if (
-                globalBiomeMatrix.TryGetValue(x, out yAxis)     // X
-                && yAxis.TryGetValue(y - 1, out biomeFound)     // Y
+                globalBiomeMatrix.TryGetValue(x + 1, out yAxis)     // X
+                && yAxis.TryGetValue(y, out biomeFound)     // Y
             ) {
                 matrix[2, 1] = biomeFound;
             } else {
@@ -134,6 +134,7 @@ namespace Chunk {
 
             // Error handler
             Error:
+            Debug.LogError("ERROR : Asked to generate a biome matrix but surounding biomes wasn't loaded correcly.");
             return null;
         }
 
@@ -315,6 +316,19 @@ namespace Chunk {
             /** RETURN DATA **/
             mesh.vertices = vertices;
             mesh.colors = colors;
+        }
+
+        public static void ApplyPerlinNoiseModification(ref Mesh mesh, Vector3 position, float scale, float perlinScale) {
+            /** RETRIEVE DATA **/
+            Vector3[] vertices = mesh.vertices;
+
+            /** EDIT DATA **/
+            for (int i = 0; i < vertices.Length; i++) {
+                vertices[i] += Vector3.up * scale * (Mathf.PerlinNoise((position.x + vertices[i].x) * perlinScale, (position.z + vertices[i].z) * perlinScale));
+            }
+
+            /** RETURN DATA **/
+            mesh.vertices = vertices;
         }
 
     }
