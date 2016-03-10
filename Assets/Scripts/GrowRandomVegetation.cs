@@ -24,23 +24,24 @@ public class GrowRandomVegetation : MonoBehaviour
 	public void growVegetation (float x, float y, float z)
 	{
 		vegetationSize = Random.Range(2, 6); // Random between 4 and 6 to randomly create bushes, little and tall trees
-		scale = Random.Range(0.5f, 1f);
+		
 		if (vegetationSize < 3)
 		{
 			veggieIndex = 0;
 			endScale = new Vector3(0.5f, 0.5f, 0.5f);
-			//scale /= 2f;
+			scale = Random.Range(0.8f, 1f);
 		}
 		else if (vegetationSize == 3)
 		{
 			veggieIndex = 1;
 			endScale = new Vector3(0.7f, 0.7f, 0.7f);
-			scale *= 1.5f;
+			scale = Random.Range(1.2f, 1.5f);
 		}
 		else
 		{
 			veggieIndex = 2;
 			endScale = new Vector3(1.5f, 1.5f, 1.5f);
+			scale = Random.Range(1.5f, 2f);
 		}
 
 		// Creating an empty gameObject to store our fractal
