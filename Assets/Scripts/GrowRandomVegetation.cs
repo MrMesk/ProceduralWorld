@@ -3,7 +3,6 @@ using System.Collections;
 
 public class GrowRandomVegetation : MonoBehaviour
 {
-
 	[Range (0f,90f)]
 	public float baseBranchSpread = 25f; // Base branch spread, will be affected by a random factor so all trees don't look the same
 	[Range(0f,100f)]
@@ -20,6 +19,12 @@ public class GrowRandomVegetation : MonoBehaviour
 	private GameObject fractalVegetation;
 	private GameObject branch;
 	private int vegetationSize; // Number of iterations
+
+	void Start()
+	{
+		Vector3 pos = transform.position;
+		growVegetation(pos.x, pos.y, pos.z);
+	}
 
 	public void growVegetation (float x, float y, float z)
 	{
